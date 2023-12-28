@@ -1,37 +1,51 @@
 package com.gabrielbarrilli.BookstoreManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_generator")
+    private Long bookId;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Lob
+    private String bookName;
 
-    @Column(nullable = false)
-    private Integer pages;
+    @Lob
+    private Integer bookPages;
 
-    @Column(nullable = false)
-    private Integer chapters;
+    @Lob
+    private Integer bookChapters;
 
-    @Column(nullable = false)
-    private String isbn;
+    @Lob
+    private String bookIsbn;
 
-    @Column(name = "publisher_name" , nullable = false, unique = true)
-    private String publisherName;
+    @Lob
+    private String bookPublisherName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "author_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tutorial_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Author author;
+
+    public Book(String bookName, Integer bookPages, Integer bookChapters, String bookIsbn, String bookPublisherName) {
+        this.bookName = bookName;
+        this.bookPages = bookPages;
+        this.bookChapters = bookChapters;
+        this.bookIsbn = bookIsbn;
+        this.bookPublisherName = bookPublisherName;
+    }
 }

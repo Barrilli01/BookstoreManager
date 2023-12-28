@@ -1,33 +1,32 @@
 package com.gabrielbarrilli.BookstoreManager.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "Authors")
 public class Author {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_generator")
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Column(name = "author_name", nullable = false, unique = true, length = 150)
+    private String authorName;
 
-    @Column(nullable = false)
-    private Integer age;
+    @Column(name = "author_age", nullable = false)
+    private Integer authorAge;
 
-    /*public Long getId() {
-        return id;
+    @Column(name = "author_published")
+    private boolean published;
+
+    public Author(String authorName, Integer authorAge, boolean published) {
+        this.authorName = authorName;
+        this.authorAge = authorAge;
+        this.published = published;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }*/
 }
